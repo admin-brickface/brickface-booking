@@ -112,11 +112,13 @@ function BookingContent() {
       }
 
       const data = await response.json();
+console.log('Data received:', data);
 
-      console.log('Data received:', data); // ADD THIS
-    console.log('Slots count:', data.slots?.length); // ADD THIS
+// Handle array response from n8n
+const responseData = Array.isArray(data) ? data[0] : data;
+console.log('Slots count:', responseData.slots?.length);
 
-      setAvailableSlots(data.slots || []);
+setAvailableSlots(responseData.slots || []);
     } catch (err) {
       console.error('Availability fetch error:', err); // ADD THIS
       setError('Unable to load available times. Please try again.');
