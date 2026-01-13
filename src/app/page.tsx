@@ -85,6 +85,8 @@ function BookingContent() {
     setAvailableSlots([]);
     setSelectedSlot(null);
 
+    console.log('Fetching availability for:', bookingData.calendarId); // ADD THIS
+
     try {
       const startDate = new Date(selectedDate);
       startDate.setHours(0, 0, 0, 0);
@@ -98,15 +100,25 @@ function BookingContent() {
         endDate: endDate.toISOString()
       });
 
+      console.log('Request URL:', `${N8N_AVAILABILITY_URL}?${params}`);
+
       const response = await fetch(`${N8N_AVAILABILITY_URL}?${params}`);
+
+      console.log('Response status:', response.status); // ADD THIS
+      console.log('Response ok:', response.ok); // ADD THIS
       
       if (!response.ok) {
         throw new Error('Failed to fetch availability');
       }
 
       const data = await response.json();
+
+      console.log('Data received:', data); // ADD THIS
+    console.log('Slots count:', data.slots?.length); // ADD THIS
+
       setAvailableSlots(data.slots || []);
     } catch (err) {
+      console.error('Availability fetch error:', err); // ADD THIS
       setError('Unable to load available times. Please try again.');
       console.error('Availability fetch error:', err);
     } finally {
